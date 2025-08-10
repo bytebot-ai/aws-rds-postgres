@@ -46,3 +46,14 @@ output "db_connection_uri" {
   )
   sensitive = true
 }
+
+output "db_connection_uri_with_env_password" {
+  description = "PostgreSQL connection URI using $(DB_PASSWORD) placeholder"
+  value = format(
+    "postgresql://%s:$(DB_PASSWORD)@%s:%d/%s",
+    urlencode(var.username),
+    aws_db_instance.this.address,
+    aws_db_instance.this.port,
+    urlencode(var.database_name),
+  )
+}

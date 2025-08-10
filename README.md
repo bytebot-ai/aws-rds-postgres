@@ -51,6 +51,12 @@ For a ready-to-use PostgreSQL connection URI (includes the password; username, p
 terraform output -raw db_connection_uri
 ```
 
+If you prefer a URI that references an environment variable for the password (literal `$(DB_PASSWORD)` placeholder):
+
+```
+terraform output -raw db_connection_uri_with_env_password
+```
+
 ## Requirements
 
 - Terraform >= 1.0.0
@@ -113,6 +119,7 @@ terraform output -raw db_connection_uri
 | db_security_group_id | The security group ID |
 | db_master_password | The master password you provided (sensitive) |
 | db_connection_uri | PostgreSQL connection URI with credentials (sensitive) |
+| db_connection_uri_with_env_password | PostgreSQL URI using $(DB_PASSWORD) placeholder |
 
 ## Security Considerations
 
