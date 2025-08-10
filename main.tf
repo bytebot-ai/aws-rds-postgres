@@ -48,7 +48,7 @@ resource "aws_db_instance" "this" {
 
   db_name  = var.database_name
   username = var.username
-  password = random_password.master.result
+  password = var.password
   port     = 5432
 
   multi_az               = var.multi_az
@@ -63,14 +63,4 @@ resource "aws_db_instance" "this" {
   deletion_protection = var.deletion_protection
 
   tags = var.tags
-}
-
-resource "random_password" "master" {
-  length           = 20
-  special          = true
-  min_upper        = 1
-  min_lower        = 1
-  min_numeric      = 1
-  min_special      = 1
-  override_special = "!#$%&*()-_=+[]{}<>:?@"
 }

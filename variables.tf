@@ -90,6 +90,17 @@ variable "username" {
   }
 }
 
+variable "password" {
+  description = "Password for the master DB user (8-128 chars)."
+  type        = string
+  sensitive   = true
+
+  validation {
+    condition     = length(var.password) >= 8 && length(var.password) <= 128
+    error_message = "password must be 8-128 characters long."
+  }
+}
+
 # Optional variables with defaults
 
 variable "engine_version" {

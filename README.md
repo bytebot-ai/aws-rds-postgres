@@ -22,6 +22,7 @@ module "postgres" {
   name_prefix   = "myapp-prod"
   database_name = "myapp"
   username      = "dbadmin"
+  password      = var.db_password # or from a secret manager
 
   # Optional variables
   instance_class    = "db.t3.micro"
@@ -37,7 +38,7 @@ module "postgres" {
 }
 ```
 
-The module auto-generates a strong random password and exposes it as a sensitive Terraform output named `db_master_password`.
+Provide the master password via input variable `password` (8–128 chars). The module echoes it back as a sensitive Terraform output named `db_master_password` for convenience.
 Retrieve it after apply with:
 
 ```
@@ -54,14 +55,12 @@ terraform output -raw db_connection_uri
 
 - Terraform >= 1.0.0
 - AWS Provider >= 4.0.0
-- Random Provider >= 3.0.0
 
 ## Providers
 
-| Name   | Version |
-|--------|---------|
-| aws    | >= 4.0.0 |
-| random | >= 3.0.0 |
+| Name | Version |
+|------|---------|
+| aws  | >= 4.0.0 |
 
 ## Inputs
 
@@ -74,6 +73,7 @@ terraform output -raw db_connection_uri
 | name_prefix | Name prefix for RDS identifier and related resources | `string` | - |
 | database_name | The name of the database to create | `string` | - |
 | username | Username for the master DB user | `string` | - |
+| password | Password for the master DB user | `string` | - |
 
 ### Optional Variables
 
@@ -111,7 +111,7 @@ terraform output -raw db_connection_uri
 | db_instance_port | The database port |
 | db_subnet_group_id | The db subnet group name |
 | db_security_group_id | The security group ID |
-| db_master_password | The generated master password (sensitive) |
+| db_master_password | The master password you provided (sensitive) |
 | db_connection_uri | PostgreSQL connection URI with credentials (sensitive) |
 
 ## Security Considerations
@@ -120,7 +120,7 @@ terraform output -raw db_connection_uri
 - Database encryption is enabled by default using AWS KMS.
 - Final snapshots are created by default when destroying the database (skip_final_snapshot = false).
 - The module uses Kubernetes backend configuration. Ensure your Terraform environment is properly configured for this.
- - The password is generated at apply time and marked as a sensitive output. Store it securely (e.g., AWS Secrets Manager) rather than relying on CLI history.
+ - Provide the password securely (e.g., from a secrets manager or environment variable) rather than hardcoding it; it is exposed as a sensitive output for convenience.
  - Ensure `name_prefix` conforms to AWS naming constraints for RDS identifiers (letters, numbers, hyphens; must start with a letter; max 63 characters).
  - Deletion protection is enabled by default. Set `deletion_protection = false` before destroying the instance.
 

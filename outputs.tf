@@ -29,8 +29,8 @@ output "db_security_group_id" {
 }
 
 output "db_master_password" {
-  description = "The generated master password (sensitive)"
-  value       = random_password.master.result
+  description = "The master password (sensitive)"
+  value       = var.password
   sensitive   = true
 }
 
@@ -39,7 +39,7 @@ output "db_connection_uri" {
   value = format(
     "postgresql://%s:%s@%s:%d/%s",
     urlencode(var.username),
-    urlencode(random_password.master.result),
+    urlencode(var.password),
     aws_db_instance.this.address,
     aws_db_instance.this.port,
     urlencode(var.database_name),
