@@ -44,7 +44,7 @@ Retrieve it after apply with:
 terraform output -raw db_master_password
 ```
 
-For a ready-to-use PostgreSQL connection URI (includes the password):
+For a ready-to-use PostgreSQL connection URI (includes the password; username, password, and database name are URL-encoded):
 
 ```
 terraform output -raw db_connection_uri
